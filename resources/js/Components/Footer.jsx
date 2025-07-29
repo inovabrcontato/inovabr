@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react'
 import LogoFooter from '@/assets/logo-footer.png'
+import WhatsAppButton from '@/Components/WhatsAppButton'
 
 export default function Footer() {
   return (
@@ -46,9 +47,10 @@ export default function Footer() {
         {/* Columna 3: Información de contacto */}
         <div className="text-sm space-y-1">
           <p>CPF: 029.298.649-15</p>
-          <p>Email: millanqjesus@google.com</p>
+          <p>Email: inovabr.contato@gmail.com</p>
         </div>
       </div>
+      <WhatsAppButton />
     </footer>
   )
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContatoMail;
+use App\Mail\BienvenidaEmail;
 use App\Models\Contact;
 use App\Models\ContactFail;
 use Exception;
@@ -10,6 +11,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -37,6 +39,29 @@ class ContatoSendController extends Controller
                 $ip        = $request->ip();
                 $userAgent = $request->userAgent();
                 $datos     = $request->only('name', 'email', 'message');
+
+                $validator = Validator::make($request->all(), [
+                    'name'      => 'required|string|max:255',
+                    'email'     => 'required|email:rfc,dns',
+                    'message'   => 'required|string'
+                ]);
+
+                if ($validator->fails()) {
+
+                    // Obtener todos los errores
+                    $allErrors = $validator->errors()->all();
+                    // Convertir a string
+                    $mensajeErrores = implode(', ', $allErrors);
+
+                    // Retornar una respuesta JSON con los errores
+                    return response()->json([
+                        'success' => false,
+                        'message' => $mensajeErrores,
+                    ], 200);
+                }
+
+                Mail::to('inovabr.contato@gmail.com')->send(new ContatoMail($datos));
+                Mail::to($datos['email'])->send(new BienvenidaEmail($datos['name']));
 
                 // Crear el registro
                 $contact = Contact::create([
@@ -77,11 +102,11 @@ class ContatoSendController extends Controller
 
     }
 
-    public function sendEmail($datos)
+    /*public function sendEmail($datos)
     {
-
         try {
-            Mail::to('jmillan@clent.cl')->send(new ContatoMail($datos));
+            // Mail::to('inovabr.contato@clent.cl')->send(new ContatoMail($datos));
+            Mail::to('inovabr.contato@gmail.com')->send(new BienvenidaEmail());
 
             return [
                 'success' => true,
@@ -109,5 +134,5 @@ class ContatoSendController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => 'Error al enviar el correo...', 'detalle' => $e->getMessage()]);
         }
-    }
+    }//*/
 }

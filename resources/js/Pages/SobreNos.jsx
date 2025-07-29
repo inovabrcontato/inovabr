@@ -6,8 +6,6 @@ import Footer from '@/Components/Footer'
 import ServiceCard from '@/Components/ServiceCard'
 import { FaUsers } from 'react-icons/fa'
 
-
-
 export default function SobreNos() {
   return (
 

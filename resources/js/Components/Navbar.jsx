@@ -28,7 +28,7 @@ export default function Navbar() {
             alt="Logo"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="h-[150px] w-auto transition duration-300 ease-in-out"
+            className="h-[100px] w-auto transition duration-300 ease-in-out"
           />
 
           <Link

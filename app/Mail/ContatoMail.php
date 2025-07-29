@@ -23,7 +23,7 @@ class ContatoMail extends Mailable
 
     public function build(){
         $datos = $this->datos;
-        return $this->markdown('responseContatoEmail',compact('datos'))->subject('Alerta ');
+        return $this->markdown('responseContatoEmail',compact('datos'))->subject('Nova mensagem do formulário de contato do seu site');
     }
 
     /**

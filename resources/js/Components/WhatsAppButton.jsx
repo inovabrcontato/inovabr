@@ -4,8 +4,8 @@ import { FaWhatsapp } from 'react-icons/fa';
 const WhatsAppButton = () => {
 
   // URL de WhatsApp
-  const whatsappUrl = `https://wa.me/5553999205659?text=Hola`;
-//   const whatsappUrl = `https://wa.me/5553999763097?text=Hola`;
+//   const whatsappUrl = `https://wa.me/5553999205659?text=Hola`;
+  const whatsappUrl = `https://wa.me/5553999763097?text=Hola, estoy interesado en sus servicios.`;
 
   return (
     <a

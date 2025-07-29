@@ -1,6 +1,5 @@
 import Navbar from '@/Components/Navbar'
 import Footer from '@/Components/Footer'
-import WhatsAppButton from '@/Components/WhatsAppButton';
 // import RecaptchaComponent from './RecaptchaComponent'
 import {useState, useEffect} from 'react';
 import axios from 'axios';
@@ -33,7 +32,9 @@ export default function ContactForm() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        // Aplicar trim solo si hay valor
+        const cleanValue = (name === 'email') ? value.trim() : value;
+        setFormData(prev => ({ ...prev, [name]: cleanValue }));
     };
 
     const handleSubmit = async (e) => {
@@ -57,14 +58,11 @@ export default function ContactForm() {
         // TU CLAVE DE RECAPTCHA V3
         const siteKey = '6LfZiIIrAAAAAOxPTZiXGOeIPlydkGpboRxnLo-T'; 
 
-        
-
         try {
 
             await grecaptcha.execute(siteKey, {action: 'submit'}).then(async function(token) {
                 // Add your logic to submit to your backend server here.
-
-                const captcha = await axios.post('http://inovabr.test/verify', {token : token, name: formData.name, email: formData.email, message: formData.message}, {
+                const captcha = await axios.post('http://inovabr.test/verify', {token : token, name: formData.name.trim(), email: formData.email.trim(), message: formData.message.trim()}, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -72,11 +70,10 @@ export default function ContactForm() {
 
                 if(!captcha.data.success)
                 {
-                    toast.error( captcha.data.error);
+                    toast.error( captcha.data.message);
                     return;
                 }
 
-                // console.warn("asd: ", captcha.data.message)
                 toast.success(captcha.data.message, {
                     position: 'top-center',
                     autoClose: 3000,
@@ -100,12 +97,6 @@ export default function ContactForm() {
             formData.message = '';
             setIsSubmitting(false);
         }
-
-        // // Simula un envío de datos
-        // await new Promise(resolve => setTimeout(resolve, 2000));
-
-        // console.log('Datos enviados:', formData);
-        // setIsSubmitting(false);
     };
 
     return (
@@ -141,7 +132,7 @@ export default function ContactForm() {
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">Email:</label>
                                         <input
-                                            type="email"
+                                            type="text"
                                             name="email"
                                             disabled={isSubmitting}
                                             value={formData.email}
@@ -165,10 +156,6 @@ export default function ContactForm() {
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                     />
                                 </div>
-
-                                {/* <div>
-                                    <RecaptchaComponent/>
-                                </div> */}
 
                                 {/* Botón Enviar */}
                                 <div>
@@ -214,8 +201,6 @@ export default function ContactForm() {
             </div>
             <Footer />
             <ToastContainer />
-            <WhatsAppButton />
-            {/* <script src="https://www.google.com/recaptcha/api.js"></script> */}
         </div>
     )
 }

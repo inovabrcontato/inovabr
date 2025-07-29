@@ -3,6 +3,7 @@ import DataScience from '@/assets/inicio/data_science.svg' // ← importa como m
 import Footer from '@/Components/Footer'
 import ServiceCard from '@/Components/ServiceCard'
 import { FaRocket, FaBullhorn } from 'react-icons/fa'
+import WhatsAppButton from '@/Components/WhatsAppButton';
 
 export default function Inicio() {
   return (
